@@ -4,6 +4,7 @@ import (
 	"math/big"
 	"bytes"
 	"crypto/sha256"
+	//"fmt"
 )
 
 // 达标条件 -- 前多少位为0
@@ -88,12 +89,13 @@ func (proofofWork *ProofofWork) Start() ([]byte, int64) {
 
 		// Hash
 		hash = sha256.Sum256(dataBytes)
+		//fmt.Printf("努力计算中，当前Hash为: 0x%x\n", hash)
 
 		//存储Hash到hashInt
 		hashInt.SetBytes(hash[:])
 		//验证Hash
 		if proofofWork.condition.Cmp(&hashInt) == 1 {
-
+			//fmt.Printf("计算完毕! Nonce 为: %d\n", nonce)
 			break
 		}
 		nonce++
