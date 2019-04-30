@@ -23,6 +23,9 @@ type Block struct {
 
 	// 区块hash
 	Hash []byte
+
+	// Nonce - 工作量证明
+	Nonce int64
 }
 
 // 计算当前区块hash
@@ -58,9 +61,18 @@ func NewBlock(data string, height int64, PrevBlockHash []byte) *Block {
 		PrevBlockHash: PrevBlockHash,
 		Data:	[]byte(data),
 		Timestamp: time.Now().Unix(),
-		Hash:	nil}
+		Hash:	nil,
+		Nonce:  0}
 
-	block.Hash_func()
+	// 调用工作量证明返回有效的hash
+	pow := NewProofofWork(block)
+	hash, nonce := pow.Start()
+	block.Hash = hash[:]
+	block.Nonce = nonce
+
+	fmt.Printf("\rNonce: %d - Hash: %x\n", nonce, hash)
+
+	// block.Hash_func()
 
 	return block
 }
